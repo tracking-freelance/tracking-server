@@ -4,6 +4,7 @@ import { TrackingsModule } from './trackings/trackings.module';
 import { UsersModule } from './users/users.module';
 import { SessionsModule } from './sessions/sessions.module';
 import { ConfigModule } from '@nestjs/config';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    SharedModule,
   ],
   controllers: [],
   providers: [],

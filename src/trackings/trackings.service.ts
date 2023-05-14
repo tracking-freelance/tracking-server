@@ -10,7 +10,7 @@ export class TrackingsService {
     const record = await this.prisma.record.create({
       data: {
         ...createTrackingDto,
-        timestamp: BigInt(createTrackingDto.timestamp),
+        timestamp: createTrackingDto.timestamp,
         session: {
           connect: { id: sessionId },
         },
