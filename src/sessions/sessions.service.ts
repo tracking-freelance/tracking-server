@@ -12,6 +12,24 @@ BigInt.prototype.toJSON = function () {
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async list(id: string, input: ListDto) {
+    const count = await this.prisma.record.count({
+      where: { sessionId: Number(id) },
+    });
+
+    const data = await this.prisma.record.findMany({
+      where: { sessionId: Number(id) },
+      skip: Number(input.offset),
+      take: Number(input.limit),
+      orderBy: { id: 'asc' },
+    });
+
+    return {
+      count,
+      data,
+    };
+  }
+
   async listByUserId(userId: string, input: ListDto) {
     const count = await this.prisma.session.count({
       where: { userId: Number(userId) },

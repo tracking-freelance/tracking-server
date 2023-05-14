@@ -35,34 +35,43 @@ export class TrackingsController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    let userId = req.cookies['user_id'];
-    if (!userId) {
-      userId = await this.usersService.create().then((u) => u.id);
+    try {
+      let userId = req.cookies['user_id'];
+      if (!userId) {
+        userId = await this.usersService.create().then((u) => u.id);
+      }
+
+      let sessionId = req.cookies['session_id'];
+      if (!sessionId) {
+        sessionId = await this.sessionsService
+          .create({ userId: parseInt(userId) })
+          .then((s) => s.id);
+      }
+
+      createTrackingDto.sessionId = parseInt(sessionId);
+
+      await this.trackingsService.create(createTrackingDto);
+
+      res
+        .cookie('user_id', userId, {
+          maxAge: 99999999999,
+          httpOnly: true,
+          secure: this.nodeEnv === 'production',
+        })
+        .cookie('session_id', sessionId, {
+          maxAge: 99999999999,
+          httpOnly: true,
+          secure: this.nodeEnv === 'production',
+        })
+        .status(HttpStatus.NO_CONTENT)
+        .json();
+    } catch (error) {
+      this.logger.error(error);
+      res
+        .clearCookie('user_id')
+        .clearCookie('session_id')
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json();
     }
-
-    let sessionId = req.cookies['session_id'];
-    if (!sessionId) {
-      sessionId = await this.sessionsService
-        .create({ userId: parseInt(userId) })
-        .then((s) => s.id);
-    }
-
-    createTrackingDto.sessionId = parseInt(sessionId);
-
-    await this.trackingsService.create(createTrackingDto);
-
-    res
-      .cookie('user_id', userId, {
-        maxAge: 99999999999,
-        httpOnly: true,
-        secure: this.nodeEnv === 'production',
-      })
-      .cookie('session_id', sessionId, {
-        maxAge: 99999999999,
-        httpOnly: true,
-        secure: this.nodeEnv === 'production',
-      })
-      .status(HttpStatus.NO_CONTENT)
-      .json();
   }
 }

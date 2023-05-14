@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { SessionsModule } from './sessions/sessions.module';
 import { ConfigModule } from '@nestjs/config';
 import { SharedModule } from './shared/shared.module';
+import { RecordsService } from './records/records.service';
+import { RecordsModule } from './records/records.module';
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import { SharedModule } from './shared/shared.module';
       isGlobal: true,
     }),
     SharedModule,
+    RecordsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [RecordsService],
 })
 export class AppModule {}
