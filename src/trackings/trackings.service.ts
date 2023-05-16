@@ -6,9 +6,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class TrackingsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create({ sessionId, ...createTrackingDto }: CreateTrackingDto) {
+  async create({ sessionId, events }: CreateTrackingDto) {
     const records = await Promise.all(
-      createTrackingDto.events.map((e) => {
+      events.map((e) => {
         return this.prisma.record.create({
           data: {
             ...(e as any),
