@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { ListDto } from 'src/shared/dto/list.dto';
 
 BigInt.prototype.toJSON = function () {
-  return this.toString();
+  return Number(this);
 };
 
 @Injectable()
