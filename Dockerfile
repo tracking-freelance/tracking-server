@@ -14,10 +14,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY --from=build /app/package*.json .
+COPY --from=build /app/package*.json ./
 RUN npm i --omit=dev
 
-COPY --from=build /app/dist .
+COPY --from=build /app/dist ./
 COPY --from=build /app/prisma ./prisma
 
 ENV PORT=3000
