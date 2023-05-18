@@ -21,4 +21,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install awsebcli
       - name: Deploy to Elastic Beanstalk
-        run: eb deploy prod -l ${{ github.run_number }} --envvars DATABASE_URL=${{ secrets.DATABASE_URL }}
+        run: eb deploy prod -l ${{ github.run_number }}
