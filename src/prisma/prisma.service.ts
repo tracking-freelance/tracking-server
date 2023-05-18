@@ -10,6 +10,12 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaService extends PrismaClient implements OnModuleInit {
   #logger = new Logger(PrismaService.name);
 
+  constructor() {
+    super({
+      log: ['query', 'info', 'warn', 'error'],
+    });
+  }
+
   async onModuleInit() {
     await this.$connect().then(() => {
       this.#logger.log('Database connected');
