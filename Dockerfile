@@ -20,9 +20,9 @@ RUN npm i --omit=dev
 COPY --from=build /app/dist ./
 COPY --from=build /app/prisma ./prisma
 
-ENV PORT=3000
+ENV PORT=80
 ENV NODE_ENV=production
-EXPOSE 3000
+EXPOSE 80
 
 RUN npx prisma generate
 CMD [ "node", "main.js" ]
