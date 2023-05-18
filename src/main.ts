@@ -4,6 +4,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
+import { execSync } from 'child_process';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +20,11 @@ async function bootstrap() {
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
 
-  await app.listen(3000);
+  if (process.env.NODE_ENV === 'production') {
+    const output = execSync('npx prisma migrate deploy');
+    console.log(output.toString());
+  }
+
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
