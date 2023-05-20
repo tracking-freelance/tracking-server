@@ -12,6 +12,19 @@ BigInt.prototype.toJSON = function () {
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async end(id: string) {
+    const now = dayjs().format('YYYY-MM-DD');
+    const endTime = BigInt(new Date().getTime());
+
+    return this.prisma.session.update({
+      where: { id: Number(id) },
+      data: {
+        endDate: now,
+        endTime,
+      },
+    });
+  }
+
   async list(id: string, input: ListDto) {
     const count = await this.prisma.record.count({
       where: { sessionId: Number(id) },
