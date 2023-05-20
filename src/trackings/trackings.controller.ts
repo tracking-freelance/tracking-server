@@ -29,6 +29,24 @@ export class TrackingsController {
     this.nodeEnv = this.configService.get<string>('NODE_ENV');
   }
 
+  @Post('end')
+  async endSession(@Req() req: Request, @Res() res: Response) {
+    let sessionId = req.cookies['session_id'];
+    await this.sessionsService.end(sessionId);
+    sessionId = await this.sessionsService
+      .create({ userId: parseInt(req.cookies['user_id']) })
+      .then((s) => s.id);
+
+    res
+      .cookie('session_id', sessionId, {
+        maxAge: 99999999999,
+        httpOnly: true,
+        secure: this.nodeEnv === 'production',
+      })
+      .status(HttpStatus.NO_CONTENT)
+      .json();
+  }
+
   @Post()
   async create(
     @Body() createTrackingDto: CreateTrackingDto,
