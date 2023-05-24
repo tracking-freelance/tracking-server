@@ -2,7 +2,7 @@ import { OnGatewayDisconnect, WebSocketGateway } from '@nestjs/websockets';
 import cookie from 'cookie';
 import { SessionsService } from 'src/sessions/sessions.service';
 
-@WebSocketGateway(+process.env.PORT || 3001, {
+@WebSocketGateway(3001, {
   cors: {
     origin: process.env.ALLOW_ORIGINS
       ? process.env.ALLOW_ORIGINS.split(',')
