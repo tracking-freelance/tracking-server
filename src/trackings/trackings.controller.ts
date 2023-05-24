@@ -30,21 +30,9 @@ export class TrackingsController {
   }
 
   @Post('end')
-  async endSession(@Req() req: Request, @Res() res: Response) {
-    let sessionId = req.cookies['session_id'];
+  async endSession(@Req() req: Request) {
+    const sessionId = req.cookies['session_id'];
     await this.sessionsService.end(sessionId);
-    sessionId = await this.sessionsService
-      .create({ userId: parseInt(req.cookies['user_id']) })
-      .then((s) => s.id);
-
-    res
-      .cookie('session_id', sessionId, {
-        maxAge: 99999999999,
-        httpOnly: true,
-        secure: this.nodeEnv === 'production',
-      })
-      .status(HttpStatus.NO_CONTENT)
-      .json();
   }
 
   @Post()
@@ -64,6 +52,13 @@ export class TrackingsController {
         sessionId = await this.sessionsService
           .create({ userId: parseInt(userId) })
           .then((s) => s.id);
+      } else {
+        const session = await this.sessionsService.findOne(sessionId);
+        if (session.endDate !== null) {
+          sessionId = await this.sessionsService
+            .create({ userId: parseInt(userId) })
+            .then((s) => s.id);
+        }
       }
 
       createTrackingDto.sessionId = parseInt(sessionId);

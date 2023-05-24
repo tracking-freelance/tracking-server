@@ -23,6 +23,7 @@ COPY --from=build /app/prisma ./prisma
 ENV PORT=80
 ENV NODE_ENV=production
 EXPOSE 80
+EXPOSE 3001
 
 RUN npx prisma generate
 CMD [ "node", "main.js" ]

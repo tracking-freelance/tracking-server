@@ -30,4 +30,25 @@ export class SessionsController {
   list(@Param('id') id: string, @Query() query: ListDto) {
     return this.recordsService.listBySessionId(id, query);
   }
+
+  @Post(':id/end')
+  async endSession(
+    @Param('id') id: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    await this.sessionsService.end(id);
+    const sessionId = await this.sessionsService
+      .create({ userId: parseInt(req.cookies['user_id']) })
+      .then((s) => s.id);
+
+    res
+      .cookie('session_id', sessionId, {
+        maxAge: 99999999999,
+        httpOnly: true,
+        secure: this.nodeEnv === 'production',
+      })
+      .status(HttpStatus.NO_CONTENT)
+      .json();
+  }
 }

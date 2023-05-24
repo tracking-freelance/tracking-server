@@ -12,6 +12,12 @@ BigInt.prototype.toJSON = function () {
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findOne(id: string) {
+    return this.prisma.session.findUnique({
+      where: { id: Number(id) },
+    });
+  }
+
   async end(id: string) {
     const now = dayjs().format('YYYY-MM-DD');
     const endTime = BigInt(new Date().getTime());

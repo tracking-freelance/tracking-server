@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { RecordsService } from './records/records.service';
 import { RecordsModule } from './records/records.module';
 import { AppController } from './app/app.controller';
+import { EventsGateway } from './events/events.gateway';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { AppController } from './app/app.controller';
     RecordsModule,
   ],
   controllers: [AppController],
-  providers: [RecordsService],
+  providers: [RecordsService, EventsGateway],
 })
 export class AppModule {}
