@@ -13,9 +13,10 @@ async function bootstrap() {
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(cookieParser());
   app.enableCors({
-    origin: process.env.ALLOW_ORIGINS
-      ? process.env.ALLOW_ORIGINS.split(',')
-      : ['http://localhost:5173', 'http://localhost:5174'],
+    origin: function (_, callback) {
+      return callback(null, true);
+    },
+    optionsSuccessStatus: 200,
     credentials: true,
   });
 
