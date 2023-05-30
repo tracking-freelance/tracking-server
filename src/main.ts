@@ -13,7 +13,9 @@ async function bootstrap() {
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(cookieParser());
   app.enableCors({
-    origin: true,
+    origin: function (origin, callback) {
+      callback(null, true);
+    },
     optionsSuccessStatus: 200,
     credentials: true,
   });
