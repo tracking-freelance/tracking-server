@@ -46,7 +46,6 @@ export class SessionsController {
       .cookie('session_id', sessionId, {
         maxAge: 99999999999,
         httpOnly: true,
-        secure: this.nodeEnv === 'production',
       })
       .status(HttpStatus.NO_CONTENT)
       .json();
