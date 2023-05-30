@@ -69,10 +69,14 @@ export class TrackingsController {
         .cookie('user_id', userId, {
           maxAge: 99999999999,
           httpOnly: true,
+          secure: this.nodeEnv === 'production',
+          sameSite: 'none',
         })
         .cookie('session_id', sessionId, {
           maxAge: 99999999999,
           httpOnly: true,
+          secure: this.nodeEnv === 'production',
+          sameSite: 'none',
         })
         .status(HttpStatus.NO_CONTENT)
         .json();
