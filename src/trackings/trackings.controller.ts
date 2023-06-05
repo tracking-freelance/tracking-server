@@ -43,12 +43,16 @@ export class TrackingsController {
   ) {
     try {
       let userId = req.cookies['user_id'];
-      if (!userId) {
+
+      if (!userId || !(await this.usersService.isUserExists(userId))) {
         userId = await this.usersService.create().then((u) => u.id);
       }
 
       let sessionId = req.cookies['session_id'];
-      if (!sessionId) {
+      if (
+        !sessionId ||
+        !(await this.sessionsService.isSessionExists(sessionId))
+      ) {
         sessionId = await this.sessionsService
           .create({ userId: parseInt(userId) })
           .then((s) => s.id);

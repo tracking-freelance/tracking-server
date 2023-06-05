@@ -6,6 +6,11 @@ import { ListDto } from 'src/shared/dto/list.dto';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async isUserExists(userId: number) {
+    const user = await this.prisma.user.findFirst({ where: { id: userId } });
+    return !!user;
+  }
+
   create() {
     return this.prisma.user.create({ data: {} });
   }

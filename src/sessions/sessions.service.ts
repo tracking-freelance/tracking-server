@@ -12,6 +12,13 @@ BigInt.prototype.toJSON = function () {
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async isSessionExists(sessionId: number) {
+    const session = await this.prisma.session.findFirst({
+      where: { id: sessionId },
+    });
+    return !!session;
+  }
+
   async findOne(id: string) {
     return this.prisma.session.findUnique({
       where: { id: Number(id) },
