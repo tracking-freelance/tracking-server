@@ -32,6 +32,12 @@ export class TrackingsController {
   @Post('end')
   async endSession(@Req() req: Request) {
     const sessionId = req.cookies['session_id'];
+    if (
+      !sessionId ||
+      (sessionId && !(await this.sessionsService.isSessionExists(sessionId)))
+    ) {
+      return;
+    }
     await this.sessionsService.end(sessionId);
   }
 
@@ -44,14 +50,17 @@ export class TrackingsController {
     try {
       let userId = req.cookies['user_id'];
 
-      if (!userId || !(await this.usersService.isUserExists(userId))) {
+      if (
+        !userId ||
+        (userId && !(await this.usersService.isUserExists(userId)))
+      ) {
         userId = await this.usersService.create().then((u) => u.id);
       }
 
       let sessionId = req.cookies['session_id'];
       if (
         !sessionId ||
-        !(await this.sessionsService.isSessionExists(sessionId))
+        (sessionId && !(await this.sessionsService.isSessionExists(sessionId)))
       ) {
         sessionId = await this.sessionsService
           .create({ userId: parseInt(userId) })
